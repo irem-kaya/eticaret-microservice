@@ -208,14 +208,6 @@ jobs:
           name: frontend-build
           path: frontend/dist
 
-      - name: Docker Image Build
-        uses: docker/build-push-action@v5
-        with:
-          context: ./frontend
-          dockerfile: ./Dockerfile.prod
-          push: false
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/frontend:${{ github.sha }}
-
       - name: GHCR'a Giriş
         uses: docker/login-action@v3
         with:
@@ -223,11 +215,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Docker Image Push
+      - name: Docker Image Build & Push
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
-          dockerfile: ./Dockerfile.prod
+          file: ./frontend/Dockerfile.prod
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/frontend:${{ github.sha }}
