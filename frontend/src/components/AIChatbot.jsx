@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 
 const BOT_NAME = 'Pınar';
 const BOT_ICON = '🐞';
-const GEMINI_KEY = 'AIzaSyBkd4TTu5rLNbsLOA2Ux4fS2p8WehfNmJs';
+const GEMINI_KEY = import.meta.env.VITE_GEMINI_KEY;
 
 const SYSTEM = `Sen TMarket Pro e-ticaret sitesinin AI asistanı Pınar'sın.
 Türkçe konuş, samimi ve yardımsever ol. Kısa ve net cevaplar ver (max 3 cümle).
@@ -45,7 +45,7 @@ export default function AIChatbot() {
 
       const response = await fetch(
         // Bunu dene:
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=AIzaSyBkd4TTu5rLNbsLOA2Ux4fS2p8WehfNmJs`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_KEY}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
