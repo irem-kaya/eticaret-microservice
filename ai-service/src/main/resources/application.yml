@@ -1,0 +1,61 @@
+server:
+  port: 8087
+
+spring:
+  application:
+    name: ai-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/product_db
+    username: eticaret
+    password: eticaret123
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+
+  flyway:
+    enabled: false
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: eticaret
+    password: eticaret123
+
+  task:
+    execution:
+      pool:
+        core-size: 5
+        max-size: 10
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/eticaret
+
+  threads:
+    virtual:
+      enabled: true
+
+app:
+  ai:
+    api-key: AIzaSyBkd4TTu5rLNbsLOA2Ux4fS2p8WehfNmJs
+    api-url: https://generativelanguage.googleapis.com/v1beta/openai
+    model: gemini-3-flash-preview
+    batch-delay-ms: 3000
+  unsplash:
+    access-key: ZdSZMoTxRB8uIaZgdm3zVhy0zQjSP0220ouF1OY3XJs
+  product-service:
+    url: http://localhost:8083
+  rabbitmq:
+    exchange: eticaret.exchange
+    routing-key:
+      product-events: product.events.key
+
+logging:
+  level:
+    com.eticaret.ai: DEBUG

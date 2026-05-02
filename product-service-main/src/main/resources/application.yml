@@ -1,0 +1,76 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: product-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/product_db
+    username: eticaret
+    password: eticaret123
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    enabled: false
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: eticaret
+    password: eticaret123
+
+
+  data:
+    redis:
+      host: localhost
+      port: 6380
+
+  cache:
+    type: redis
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/eticaret
+
+  threads:
+    virtual:
+      enabled: true
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+app:
+  rabbitmq:
+    exchange: eticaret.exchange
+    queue:
+      log: product.log.queue
+      low-stock: product.low.stock.queue
+      product-events: product-events        # EKSİK OLAN SATIR BUYDU
+    routing-key:
+      log: product.log.routing.key
+      low-stock: product.low.stock.routing.key
+      product-added: product.added
+      product-events: product.events.key    # BUNU DA EKLEMEN GEREKİR
+  storage:
+    type: local
+    local:
+      upload-dir: uploads/
+
+logging:
+  level:
+    com.eticaret.product: DEBUG
+    org.springframework.amqp: INFO

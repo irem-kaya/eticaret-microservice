@@ -1,0 +1,46 @@
+server:
+  port: 8089
+
+spring:
+  application:
+    name: cart-service
+
+  data:
+    redis:
+      host: localhost
+      port: 6380
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: eticaret
+    password: eticaret123
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/eticaret
+
+  threads:
+    virtual:
+      enabled: true
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+app:
+  rabbitmq:
+    exchange: eticaret.exchange
+    queue:
+      cart: cart.queue
+      log: log.queue
+    routing-key:
+      cart-checkedout: cart.checkedout
+      log: log.routing.key
+
+  cart:
+    ttl-minutes: 1440

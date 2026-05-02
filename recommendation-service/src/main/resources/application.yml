@@ -1,0 +1,40 @@
+server:
+  port: 8088
+
+spring:
+  application:
+    name: recommendation-service
+
+  data:
+    redis:
+      host: localhost
+      port: 6380
+      timeout: 2000ms
+      database: 1
+
+  rabbitmq:
+    host: localhost
+    port: 5672          # 5673 → 5672 DÜZELTİLDİ
+    username: eticaret
+    password: eticaret123
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/eticaret
+
+  threads:
+    virtual:
+      enabled: true
+
+logging:
+  level:
+    com.eticaret.recommendation: INFO
+    org.springframework.amqp: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics

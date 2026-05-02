@@ -1,0 +1,41 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: notification-service
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:your-email@gmail.com}
+    password: ${MAIL_PASSWORD:your-app-password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+app:
+  notification:
+    from-email: noreply@tmarket.com
+    admin-email: ${ADMIN_EMAIL:admin@tmarket.com}
+    email-enabled: ${EMAIL_ENABLED:true}
+  rabbitmq:
+    queues:
+      order-created: notification.order.created
+      payment-completed: notification.payment.completed
+      payment-failed: notification.payment.failed
+      low-stock: notification.low.stock
+
+logging:
+  level:
+    com.eticaret.notification: DEBUG
+    org.springframework.amqp: INFO
