@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 
 /**
  * Carousel Component - Benzer ürünleri gösteren kaydırılabilir slider

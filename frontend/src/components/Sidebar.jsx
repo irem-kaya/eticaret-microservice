@@ -1,132 +1,108 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-/**
- * Sidebar Component - Kategoriler, fiyat filtresi, ayarlar
- */
 export default function Sidebar({ categories = [], onFilterChange }) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [expandedCategories, setExpandedCategories] = useState({});
-  const [showSettings, setShowSettings] = useState(false);
   const [gridColumns, setGridColumns] = useState(4);
-
   const categoryId = searchParams.get('categoryId') || '';
-
-  const toggleCategory = (catId) => {
-    setExpandedCategories((prev) => ({
-      ...prev,
-      [catId]: !prev[catId],
-    }));
-  };
 
   const handleGridChange = (cols) => {
     setGridColumns(cols);
     onFilterChange?.({ gridColumns: cols });
   };
 
+  const priceRanges = [
+    { label: '0 - 2.000 TL', minPrice: null, maxPrice: 2000 },
+    { label: '2.000 - 5.000 TL', minPrice: 2000, maxPrice: 5000 },
+    { label: '5.000 - 20.000 TL', minPrice: 5000, maxPrice: 20000 },
+    { label: '20.000 TL ve uzeri', minPrice: 20000, maxPrice: null },
+  ];
+
+  const handlePriceRange = (range) => {
+    const params = new URLSearchParams(searchParams);
+    if (range.minPrice) params.set('minPrice', range.minPrice);
+    else params.delete('minPrice');
+    if (range.maxPrice) params.set('maxPrice', range.maxPrice);
+    else params.delete('maxPrice');
+    navigate('/?' + params.toString());
+  };
+
+  const currentMin = searchParams.get('minPrice');
+  const currentMax = searchParams.get('maxPrice');
+
   return (
-    <>
-      {/* Sidebar */}
-      <aside className="w-56 flex-shrink-0 space-y-4">
-        {/* Kategoriler */}
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <h3 className="text-sm font-bold text-red-600 mb-3 pb-2 border-b-2 border-red-100">
-            📁 Kategoriler
-          </h3>
+    <aside style={{ width: '220px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+
+      {/* Kategoriler */}
+      <div style={s.card}>
+        <h3 style={s.cardTitle}>Kategoriler</h3>
+        <div
+          onClick={() => navigate('/')}
+          style={{ ...s.catItem, ...(categoryId === '' ? s.catActive : {}) }}
+        >
+          Tum Kategoriler
+        </div>
+        {categories.map(cat => (
           <div
-            onClick={() => navigate('/')}
-            className={`py-2 px-2 rounded cursor-pointer text-sm transition ${
-              categoryId === ''
-                ? 'bg-red-50 text-red-600 font-semibold'
-                : 'text-gray-700 hover:bg-gray-50'
-            }`}
+            key={cat.id}
+            onClick={() => navigate('/?categoryId=' + cat.id)}
+            style={{ ...s.catItem, ...(String(categoryId) === String(cat.id) ? s.catActive : {}) }}
           >
-            <div className="flex justify-between items-center">
-              <span>Tümü</span>
-              {categoryId === '' && <span className="text-green-500">✓</span>}
-            </div>
+            <span>{cat.name}</span>
+            {String(categoryId) === String(cat.id) && <span style={{ color: '#4caf50' }}>✓</span>}
           </div>
-          {categories.map((cat) => (
+        ))}
+      </div>
+
+      {/* Fiyat Araligi */}
+      <div style={s.card}>
+        <h3 style={s.cardTitle}>Fiyat Araligi</h3>
+        {priceRanges.map((range, idx) => {
+          const isActive = String(currentMin || '') === String(range.minPrice || '') &&
+                           String(currentMax || '') === String(range.maxPrice || '');
+          return (
             <div
-              key={cat.id}
-              onClick={() => navigate(`/?categoryId=${cat.id}`)}
-              className={`py-2 px-2 rounded cursor-pointer text-sm transition ${
-                String(categoryId) === String(cat.id)
-                  ? 'bg-red-50 text-red-600 font-semibold'
-                  : 'text-gray-700 hover:bg-gray-50'
-              }`}
+              key={idx}
+              onClick={() => handlePriceRange(range)}
+              style={{ ...s.priceItem, ...(isActive ? s.priceActive : {}) }}
             >
-              <div className="flex justify-between items-center">
-                <span>{cat.name}</span>
-                {String(categoryId) === String(cat.id) && <span className="text-green-500">✓</span>}
-              </div>
+              <input type="checkbox" readOnly checked={isActive} style={{ marginRight: '8px' }} />
+              {range.label}
             </div>
+          );
+        })}
+      </div>
+
+      {/* Gorunum Ayarlari */}
+      <div style={s.card}>
+        <h3 style={s.cardTitle}>Gorunum</h3>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          {[3, 4, 5].map(col => (
+            <button
+              key={col}
+              onClick={() => handleGridChange(col)}
+              style={{
+                ...s.gridBtn,
+                background: gridColumns === col ? '#e53935' : '#f5f5f5',
+                color: gridColumns === col ? 'white' : '#333',
+              }}
+            >
+              {col}
+            </button>
           ))}
         </div>
-
-        {/* Fiyat Aralığı */}
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <h3 className="text-sm font-bold text-red-600 mb-3 pb-2 border-b-2 border-red-100">
-            💰 Fiyat Aralığı
-          </h3>
-          <div className="space-y-2">
-            {[
-              { label: '0 - 1.000 ₺', minPrice: null, maxPrice: 1000 },
-              { label: '1.000 - 5.000 ₺', minPrice: 1000, maxPrice: 5000 },
-              { label: '5.000 - 20.000 ₺', minPrice: 5000, maxPrice: 20000 },
-              { label: '20.000 ₺ ve üzeri', minPrice: 20000, maxPrice: null },
-            ].map((range, idx) => (
-              <div
-                key={idx}
-                onClick={() => {
-                  const params = new URLSearchParams(searchParams);
-                  if (range.minPrice) params.set('minPrice', range.minPrice);
-                  else params.delete('minPrice');
-                  if (range.maxPrice) params.set('maxPrice', range.maxPrice);
-                  else params.delete('maxPrice');
-                  navigate(`/?${params.toString()}`);
-                }}
-                className="py-2 px-2 rounded cursor-pointer text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition"
-              >
-                {range.label}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Görünüm Ayarları */}
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <h3 className="text-sm font-bold text-red-600 mb-3 pb-2 border-b-2 border-red-100">
-            ⚙️ Görünüm
-          </h3>
-          <div className="grid grid-cols-3 gap-2">
-            {[2, 3, 4].map((cols) => (
-              <button
-                key={cols}
-                onClick={() => handleGridChange(cols)}
-                className={`px-3 py-2 rounded font-semibold text-sm transition ${
-                  gridColumns === cols
-                    ? 'bg-red-600 text-white shadow-sm'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-                title={`${cols} sütunlu görünüm`}
-              >
-                {cols}✕
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Filtreleri Temizle */}
-        <button
-          onClick={() => navigate('/')}
-          className="w-full py-3 px-4 rounded-lg font-semibold text-sm text-red-600 bg-red-50 hover:bg-red-100 transition border border-red-200"
-        >
-          🗑️ Filtreleri Temizle
-        </button>
-      </aside>
-    </>
+      </div>
+    </aside>
   );
-
 }
+
+const s = {
+  card: { background: 'white', borderRadius: '8px', padding: '1rem', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' },
+  cardTitle: { fontSize: '0.85rem', fontWeight: '700', color: '#e53935', marginBottom: '0.75rem', paddingBottom: '0.5rem', borderBottom: '2px solid #ffebee', margin: '0 0 0.75rem 0' },
+  catItem: { padding: '0.4rem 0.5rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.875rem', color: '#555', display: 'flex', justifyContent: 'space-between', transition: 'background 0.15s' },
+  catActive: { background: '#ffebee', color: '#e53935', fontWeight: '600' },
+  priceItem: { display: 'flex', alignItems: 'center', padding: '0.4rem 0.5rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.875rem', color: '#555' },
+  priceActive: { background: '#ffebee', color: '#e53935', fontWeight: '600' },
+  gridBtn: { border: 'none', borderRadius: '6px', padding: '0.3rem 0.7rem', cursor: 'pointer', fontWeight: '600' },
+};

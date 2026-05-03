@@ -30,7 +30,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8180/realms/eticaret
+          issuer-uri: http://localhost:8180/realms/Eticaret
 
   threads:
     virtual:
@@ -51,3 +51,15 @@ app:
     routing-key:
       user-registered: user.registered
       log: log.routing.key
+  keycloak:
+    server-url: http://localhost:8180
+    realm: Eticaret
+    client-id: admin-cli
+    username: admin
+    password: admin123
+
+  logging:
+    level:
+      com.eticaret: DEBUG
+      org.keycloak: DEBUG
+      root: INFO

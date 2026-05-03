@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
-const KEYCLOAK_URL = 'http://localhost:8180';
-const REALM = 'eticaret';
-
 export default function RegisterPage() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -21,62 +18,34 @@ export default function RegisterPage() {
     setError('');
 
     if (form.password !== form.confirmPassword) {
-      setError('Şifreler eşleşmiyor'); return;
+      setError('Sifreler eslesmiyor'); return;
     }
     if (form.password.length < 6) {
-      setError('Şifre en az 6 karakter olmalı'); return;
+      setError('Sifre en az 6 karakter olmali'); return;
     }
 
     setLoading(true);
     try {
-      // Admin token al
-      const tokenRes = await fetch(
-        `${KEYCLOAK_URL}/realms/master/protocol/openid-connect/token`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: 'grant_type=password&client_id=admin-cli&username=admin&password=admin123'
-        }
-      );
-      const tokenData = await tokenRes.json();
-      const adminToken = tokenData.access_token;
-
-      // Kullanıcı oluştur
-      const userRes = await fetch(
-        `${KEYCLOAK_URL}/admin/realms/${REALM}/users`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${adminToken}`
-          },
-          body: JSON.stringify({
-            username: form.username,
-            email: form.email,
-            firstName: form.firstName,
-            lastName: form.lastName,
-            enabled: true,
-            emailVerified: true,
-            credentials: [{
-              type: 'password',
-              value: form.password,
-              temporary: false
-            }]
-          })
-        }
-      );
-
+      const userRes = await fetch('/api/users/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: form.firstName,
+          lastName: form.lastName,
+          username: form.username,
+          email: form.email,
+          password: form.password
+        })
+      });
       if (userRes.status === 201) {
         setSuccess(true);
         setTimeout(() => navigate('/login'), 2000);
-      } else if (userRes.status === 409) {
-        setError('Bu kullanıcı adı veya e-posta zaten kullanılıyor');
       } else {
         const errData = await userRes.json();
-        setError(errData.errorMessage || 'Kayıt başarısız');
+        setError(errData.message || 'Kayit basarisiz');
       }
     } catch (err) {
-      setError('Bağlantı hatası. Lütfen tekrar deneyin.');
+      setError('Baglanti hatasi. Lutfen tekrar deneyin.');
     } finally {
       setLoading(false);
     }
@@ -87,8 +56,8 @@ export default function RegisterPage() {
       <div style={s.page}>
         <div style={s.card}>
           <div style={s.successIcon}>✅</div>
-          <h2 style={s.title}>Kayıt Başarılı!</h2>
-          <p style={s.sub}>Hesabın oluşturuldu. Giriş sayfasına yönlendiriliyorsun...</p>
+          <h2 style={s.title}>Kayit Basarili!</h2>
+          <p style={s.sub}>Hesabin olusturuldu. Giris sayfasina yonlendiriliyorsun...</p>
         </div>
       </div>
     );
@@ -97,7 +66,6 @@ export default function RegisterPage() {
   return (
     <div style={s.page}>
       <div style={s.card}>
-        {/* Logo */}
         <div style={s.logoRow}>
           <Link to="/" style={s.logo}>
             <span style={s.logoMark}>T</span>
@@ -106,8 +74,8 @@ export default function RegisterPage() {
           </Link>
         </div>
 
-        <h2 style={s.title}>Üye Ol</h2>
-        <p style={s.sub}>Hemen üye ol, avantajlardan yararlan</p>
+        <h2 style={s.title}>Uye Ol</h2>
+        <p style={s.sub}>Hemen uye ol, avantajlardan yararlan</p>
 
         {error && <div style={s.error}>⚠️ {error}</div>}
 
@@ -116,17 +84,17 @@ export default function RegisterPage() {
             <div style={s.field}>
               <label style={s.label}>Ad</label>
               <input style={s.input} name="firstName" value={form.firstName}
-                onChange={handleChange} placeholder="Adınız" required />
+                onChange={handleChange} placeholder="Adiniz" required />
             </div>
             <div style={s.field}>
               <label style={s.label}>Soyad</label>
               <input style={s.input} name="lastName" value={form.lastName}
-                onChange={handleChange} placeholder="Soyadınız" required />
+                onChange={handleChange} placeholder="Soyadiniz" required />
             </div>
           </div>
 
           <div style={s.field}>
-            <label style={s.label}>Kullanıcı Adı</label>
+            <label style={s.label}>Kullanici Adi</label>
             <input style={s.input} name="username" value={form.username}
               onChange={handleChange} placeholder="kullanici_adi" required />
           </div>
@@ -138,7 +106,7 @@ export default function RegisterPage() {
           </div>
 
           <div style={s.field}>
-            <label style={s.label}>Şifre</label>
+            <label style={s.label}>Sifre</label>
             <div style={s.passWrap}>
               <input
                 style={{ ...s.input, paddingRight: '48px' }}
@@ -156,30 +124,30 @@ export default function RegisterPage() {
           </div>
 
           <div style={s.field}>
-            <label style={s.label}>Şifre Tekrar</label>
+            <label style={s.label}>Sifre Tekrar</label>
             <input
               style={{ ...s.input, borderColor: form.confirmPassword && form.password !== form.confirmPassword ? '#c62828' : '#e0e0e0' }}
               type="password"
               name="confirmPassword"
               value={form.confirmPassword}
               onChange={handleChange}
-              placeholder="Şifrenizi tekrar girin"
+              placeholder="Sifrenizi tekrar girin"
               required
             />
             {form.confirmPassword && form.password !== form.confirmPassword && (
-              <span style={s.passErr}>Şifreler eşleşmiyor</span>
+              <span style={s.passErr}>Sifreler eslesmiyor</span>
             )}
           </div>
 
           <div style={s.kvkk}>
             <input type="checkbox" required style={{ marginRight: '8px', accentColor: '#c62828' }} />
             <span style={{ fontSize: '12px', color: '#666' }}>
-              <strong>Kullanım Koşulları</strong> ve <strong>Gizlilik Politikası</strong>'nı kabul ediyorum
+              <strong>Kullanim Kosullari</strong> ve <strong>Gizlilik Politikasi</strong> kabul ediyorum
             </span>
           </div>
 
           <button style={{ ...s.btn, opacity: loading ? 0.7 : 1 }} type="submit" disabled={loading}>
-            {loading ? 'Kayıt yapılıyor...' : 'Üye Ol'}
+            {loading ? 'Kayit yapiliyor...' : 'Uye Ol'}
           </button>
         </form>
 
@@ -190,8 +158,8 @@ export default function RegisterPage() {
         </div>
 
         <div style={s.loginRow}>
-          <span style={s.loginText}>Zaten hesabın var mı?</span>
-          <Link to="/login" style={s.loginLink}>Giriş Yap →</Link>
+          <span style={s.loginText}>Zaten hesabin var mi?</span>
+          <Link to="/login" style={s.loginLink}>Giris Yap</Link>
         </div>
       </div>
     </div>

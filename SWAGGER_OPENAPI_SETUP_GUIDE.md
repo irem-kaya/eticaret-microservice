@@ -950,10 +950,3 @@ Endpoints:
 - **Swagger UI:** https://swagger.io/tools/swagger-ui/
 - **JSON Example:** http://localhost:8082/v3/api-docs
 
----
-
-**Happy Documenting!** 📚✨
-
-**Status:** ✅ Complete Swagger/OpenAPI Setup  
-**Date:** May 2, 2026  
-**Version:** 1.0.0

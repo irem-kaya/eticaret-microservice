@@ -39,7 +39,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneral(
             Exception ex, HttpServletRequest request) {
+        ex.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ErrorResponse.of(500, "Sunucu hatası", request.getRequestURI()));
+                .body(ErrorResponse.of(500, ex.getMessage() + " | " + ex.getClass().getSimpleName(), request.getRequestURI()));
     }
 }

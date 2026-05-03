@@ -2,6 +2,7 @@ package com.eticaret.user.domain;
 
 import com.eticaret.common.ApiResponse;
 import com.eticaret.user.dto.CreateUserRequest;
+import com.eticaret.user.dto.RegisterRequest;
 import com.eticaret.user.dto.UpdateUserRequest;
 import com.eticaret.user.dto.UserResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,6 +31,15 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success("Kullanıcı oluşturuldu", userService.createUser(request)));
+    }
+
+    @PostMapping("/register")
+    @Operation(summary = "Keycloak ile kullanici kaydet")
+    public ResponseEntity<ApiResponse<UserResponse>> register(
+            @Valid @RequestBody RegisterRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ApiResponse.success("Kullanici olusturuldu", userService.register(request)));
     }
 
     @GetMapping("/{id}")

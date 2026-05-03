@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Fuzzy Search Service - %75 Eşleşme Algoritması
  * Levenshtein distance + string similarity kullanır
  */

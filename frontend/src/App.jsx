@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+﻿import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import Navbar from './components/Navbar';
@@ -10,6 +10,7 @@ import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderSuccessPage from './pages/OrderSuccessPage';
 import OrdersPage from './pages/OrdersPage';
+import OrderDetailPage from './pages/OrderDetailPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AdminPage from './pages/AdminPage';
@@ -38,6 +39,7 @@ export default function App() {
                   <Route path="/checkout" element={<CheckoutPage />} />
                   <Route path="/order-success" element={<OrderSuccessPage />} />
                   <Route path="/orders" element={<OrdersPage />} />
+                  <Route path="/orders/:id" element={<OrderDetailPage />} />
                   <Route path="/login" element={<LoginPage />} />
                   <Route path="/register" element={<RegisterPage />} />
                   <Route path="/flash-sale" element={<FlashSalePage />} />

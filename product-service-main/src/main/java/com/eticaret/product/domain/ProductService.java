@@ -115,15 +115,12 @@ public class ProductService {
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<Product> result;
 
-        if (keyword != null && !keyword.isBlank()) {
-            result = productRepository.searchByKeyword(keyword, pageable);
-        } else if (categoryId != null) {
-            result = productRepository.findByCategoryIdAndActiveTrue(categoryId, pageable);
-        } else if (minPrice != null && maxPrice != null) {
-            result = productRepository.findByPriceRange(minPrice, maxPrice, pageable);
-        } else {
-            result = productRepository.findByActiveTrue(pageable);
-        }
+        result = productRepository.findWithFilters(
+                (keyword != null && !keyword.isBlank()) ? keyword : null,
+                categoryId,
+                minPrice,
+                maxPrice,
+                pageable);
 
         return toPageResponse(result);
     }

@@ -37,3 +37,12 @@ build/
 
 ### Mac OS ###
 .DS_Store
+.env
+.env.local
+
+### IntelliJ IDEA - full folder ###
+.idea/
+
+### Log files ###
+*.log
+log.txt

@@ -1,4 +1,4 @@
-const KEYCLOAK_URL = 'http://localhost:8180';
+﻿const KEYCLOAK_URL = 'http://localhost:8180';
 const REALM = 'eticaret';
 const CLIENT_ID = 'eticaret-frontend';
 
@@ -21,18 +21,18 @@ export const authService = {
     if (!response.ok) throw new Error('Giriş başarısız');
 
     const data = await response.json();
-    localStorage.setItem('token', data.access_token);
-    localStorage.setItem('refresh_token', data.refresh_token);
+
+    // HttpOnly cookie backend tarafından set edilmeli
+    // Frontend sadece sessionStorage'da kısa süreli tutar
+    sessionStorage.setItem('token', data.access_token);
     return data;
   },
 
   logout: () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('refresh_token');
+    sessionStorage.removeItem('token');
     window.location.href = '/';
   },
 
-  isLoggedIn: () => !!localStorage.getItem('token'),
-
-  getToken: () => localStorage.getItem('token'),
+  isLoggedIn: () => !!sessionStorage.getItem('token'),
+  getToken: () => sessionStorage.getItem('token'),
 };

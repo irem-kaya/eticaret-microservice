@@ -105,6 +105,46 @@ jobs:
           path: '**/target/surefire-reports/'
           retention-days: 10
 
+      - name: Slack — Build Başarılı
+        if: success()
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "✅ *Build & Test Başarılı!*",
+              "attachments": [{
+                "color": "#4CAF50",
+                "fields": [
+                  { "title": "Branch", "value": "${{ github.ref_name }}", "short": true },
+                  { "title": "Tetikleyen", "value": "${{ github.actor }}", "short": true },
+                  { "title": "Commit", "value": "${{ github.event.head_commit.message }}", "short": false }
+                ]
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+      - name: Slack — Build Başarısız
+        if: failure()
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "❌ *Build & Test Başarısız!*",
+              "attachments": [{
+                "color": "#F44336",
+                "fields": [
+                  { "title": "Branch", "value": "${{ github.ref_name }}", "short": true },
+                  { "title": "Tetikleyen", "value": "${{ github.actor }}", "short": true },
+                  { "title": "Log", "value": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}", "short": false }
+                ]
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
   # ── 2. Frontend Build ────────────────────────────────────────────────────────────
   build-frontend:
     name: Frontend Build
@@ -137,6 +177,26 @@ jobs:
           name: frontend-build
           path: frontend/dist/
           retention-days: 7
+
+      - name: Slack — Frontend Build Başarısız
+        if: failure()
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "❌ *Frontend Build Başarısız!*",
+              "attachments": [{
+                "color": "#F44336",
+                "fields": [
+                  { "title": "Branch", "value": "${{ github.ref_name }}", "short": true },
+                  { "title": "Tetikleyen", "value": "${{ github.actor }}", "short": true },
+                  { "title": "Log", "value": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}", "short": false }
+                ]
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
   # ── 3. Docker Image Build (Backend) ──────────────────────────────────────────────
   docker-build-backend:
@@ -191,6 +251,26 @@ jobs:
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/${{ matrix.service }}:${{ github.sha }}
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/${{ matrix.service }}:latest
 
+      - name: Slack — Docker Build Başarısız
+        if: failure()
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "❌ *Docker Build Başarısız! (${{ matrix.service }})*",
+              "attachments": [{
+                "color": "#F44336",
+                "fields": [
+                  { "title": "Servis", "value": "${{ matrix.service }}", "short": true },
+                  { "title": "Branch", "value": "${{ github.ref_name }}", "short": true },
+                  { "title": "Log", "value": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}", "short": false }
+                ]
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
   # ── 4. Docker Image Build (Frontend) ─────────────────────────────────────────────
   docker-build-frontend:
     name: Docker Build Frontend
@@ -225,8 +305,7 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/frontend:${{ github.sha }}
             ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/frontend:latest
 
-
-  # �� 5. Production Deploy �����������������������������������������������������
+  # ── 5. Production Deploy ──────────────────────────────────────────────────────────
   deploy-production:
     name: Production Deploy
     runs-on: ubuntu-latest
@@ -237,6 +316,47 @@ jobs:
       url: http://13.50.239.68
 
     steps:
-      - name: Deploy Tamamlandi
+      - name: Deploy Tamamlandı
         run: echo "Deployment successful!"
 
+      - name: Slack — Deploy Başarılı
+        if: success()
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "🚀 *Production Deploy Tamamlandı!*",
+              "attachments": [{
+                "color": "#4CAF50",
+                "fields": [
+                  { "title": "Ortam", "value": "Production 🌍", "short": true },
+                  { "title": "Versiyon", "value": "${{ github.sha }}", "short": true },
+                  { "title": "URL", "value": "http://13.50.239.68", "short": false },
+                  { "title": "Tetikleyen", "value": "${{ github.actor }}", "short": true },
+                  { "title": "Commit", "value": "${{ github.event.head_commit.message }}", "short": false }
+                ]
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+      - name: Slack — Deploy Başarısız
+        if: failure()
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "💥 *Production Deploy Başarısız!*",
+              "attachments": [{
+                "color": "#F44336",
+                "fields": [
+                  { "title": "Branch", "value": "${{ github.ref_name }}", "short": true },
+                  { "title": "Tetikleyen", "value": "${{ github.actor }}", "short": true },
+                  { "title": "Log", "value": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}", "short": false }
+                ]
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

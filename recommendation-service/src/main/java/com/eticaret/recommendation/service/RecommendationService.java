@@ -135,6 +135,9 @@ public class RecommendationService {
         log.info("🗑️  Kategori {} önerileri temizlendi", categoryId);
     }
 
+    public void refreshAllRecommendations() {
+    }
+
     /**
      * Product Added Event
      */

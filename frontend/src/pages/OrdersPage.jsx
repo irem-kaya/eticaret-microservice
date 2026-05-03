@@ -1,18 +1,20 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { orderService } from '../services/orderService';
 
 const STATUS_LABELS = {
   PENDING: { label: 'Bekliyor', color: '#ff9800' },
-  CONFIRMED: { label: 'Onaylandı', color: '#2196f3' },
-  PAYMENT_COMPLETED: { label: 'Ödendi', color: '#4caf50' },
+  CONFIRMED: { label: 'Onaylandi', color: '#2196f3' },
+  PAYMENT_COMPLETED: { label: 'Odendi', color: '#4caf50' },
   SHIPPED: { label: 'Kargoda', color: '#9c27b0' },
   DELIVERED: { label: 'Teslim Edildi', color: '#4caf50' },
-  CANCELLED: { label: 'İptal', color: '#f44336' },
+  CANCELLED: { label: 'Iptal', color: '#f44336' },
 };
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetch = async () => {
@@ -28,19 +30,19 @@ export default function OrdersPage() {
     fetch();
   }, []);
 
-  if (loading) return <div style={styles.loading}>Yükleniyor...</div>;
+  if (loading) return <div style={styles.loading}>Yukleniyor...</div>;
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>Siparişlerim</h2>
+      <h2 style={styles.title}>Siparislerim</h2>
       {orders.length === 0 ? (
-        <div style={styles.empty}>Henüz sipariş vermediniz</div>
+        <div style={styles.empty}>Henuz siparis vermediniz</div>
       ) : (
         orders.map(order => (
-          <div key={order.id} style={styles.card}>
+          <div key={order.id} style={{...styles.card, cursor: 'pointer'}} onClick={() => navigate('/orders/' + order.id)}>
             <div style={styles.cardHeader}>
               <div>
-                <span style={styles.orderId}>Sipariş #{order.id}</span>
+                <span style={styles.orderId}>Siparis #{order.id}</span>
                 <span style={styles.date}>
                   {new Date(order.createdAt).toLocaleDateString('tr-TR')}
                 </span>
@@ -57,12 +59,12 @@ export default function OrdersPage() {
               {order.items.map(item => (
                 <div key={item.productId} style={styles.item}>
                   <span>{item.productName} x{item.quantity}</span>
-                  <span>{item.totalPrice?.toLocaleString('tr-TR')} ₺</span>
+                  <span>{item.totalPrice?.toLocaleString('tr-TR')} TL</span>
                 </div>
               ))}
             </div>
             <div style={styles.total}>
-              Toplam: <strong>{order.totalAmount?.toLocaleString('tr-TR')} ₺</strong>
+              Toplam: <strong>{order.totalAmount?.toLocaleString('tr-TR')} TL</strong>
             </div>
           </div>
         ))

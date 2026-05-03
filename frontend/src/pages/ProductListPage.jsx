@@ -1,34 +1,34 @@
-import { useState, useEffect, useCallback } from 'react';
+﻿import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { productService, categoryService } from '../services/productService';
 import { useCart } from '../context/CartContext';
 
 const SORT_OPTIONS = [
-  { value: 'createdAt', label: 'Akıllı Sıralama' },
-  { value: 'price', label: 'En Düşük Fiyat' },
+  { value: 'createdAt', label: 'Akilli Siralama' },
+  { value: 'price', label: 'En Dusuk Fiyat' },
   { value: 'name_asc', label: 'A-Z' },
   { value: 'name_desc', label: 'Z-A' },
 ];
 
 const BANNER_SLIDES = [
-  { bg: 'linear-gradient(120deg, #1a237e 0%, #3949ab 100%)', title: 'Elektronik Dünyası', sub: 'En yeni teknoloji ürünleri', badge: '%50 İndirim', badgeColor: '#ff6b6b', img: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=700&q=80', cat: 'Elektronik' },
-  { bg: 'linear-gradient(120deg, #880e4f 0%, #e91e63 100%)', title: 'Moda & Stil', sub: 'Trendleri yakala', badge: '%40 İndirim', badgeColor: '#fff176', img: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=700&q=80', cat: 'Giyim' },
-  { bg: 'linear-gradient(120deg, #1b5e20 0%, #388e3c 100%)', title: 'Ev & Yaşam', sub: 'Evinizi güzelleştirin', badge: '%35 İndirim', badgeColor: '#80deea', img: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=700&q=80', cat: 'Ev Yasam' },
+  { bg: 'linear-gradient(120deg, #1a237e 0%, #3949ab 100%)', title: 'Elektronik Dunyasi', sub: 'En yeni teknoloji urunleri', badge: '%50 Indirim', badgeColor: '#ff6b6b', img: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=700&q=80', cat: 'Elektronik' },
+  { bg: 'linear-gradient(120deg, #880e4f 0%, #e91e63 100%)', title: 'Moda & Stil', sub: 'Trendleri yakala', badge: '%40 Indirim', badgeColor: '#fff176', img: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=700&q=80', cat: 'Giyim' },
+  { bg: 'linear-gradient(120deg, #1b5e20 0%, #388e3c 100%)', title: 'Ev & Yasam', sub: 'Evinizi guzelleştirin', badge: '%35 Indirim', badgeColor: '#80deea', img: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=700&q=80', cat: 'Ev Yasam' },
 ];
 
 const KAMPANYA_BLOKLAR = [
-  { icon: '🔥', title: 'Flash Sale', sub: 'Sınırlı süre', color: '#fff3e0', border: '#ff9800', text: '#e65100', route: '/flash-sale' },
-  { icon: '🚀', title: 'Ücretsiz Kargo', sub: '500₺ üzeri', color: '#e3f2fd', border: '#1565c0', text: '#1565c0', route: null },
-  { icon: '💎', title: 'Premium Ürünler', sub: 'Seçkin markalar', color: '#f3e5f5', border: '#7b1fa2', text: '#6a1b9a', cat: 'Giyim' },
-  { icon: '⭐', title: 'Çok Satanlar', sub: 'En popüler', color: '#e8f5e9', border: '#2e7d32', text: '#1b5e20', route: '/best-sellers' },
-  { icon: '🎁', title: 'Özel Teklifler', sub: 'Sadece bugün', color: '#fce4ec', border: '#c62828', text: '#b71c1c', cat: 'Spor' },
+  { icon: '🔥', title: 'Flash Sale', sub: 'Sinirli sure', color: '#fff3e0', border: '#ff9800', text: '#e65100', route: '/flash-sale' },
+  { icon: '🚀', title: 'Ucretsiz Kargo', sub: '500 TL uzeri', color: '#e3f2fd', border: '#1565c0', text: '#1565c0', route: null },
+  { icon: '💎', title: 'Premium Urunler', sub: 'Seckin markalar', color: '#f3e5f5', border: '#7b1fa2', text: '#6a1b9a', cat: 'Giyim' },
+  { icon: '⭐', title: 'Cok Satanlar', sub: 'En populer', color: '#e8f5e9', border: '#2e7d32', text: '#1b5e20', route: '/best-sellers' },
+  { icon: '🎁', title: 'Ozel Teklifler', sub: 'Sadece bugun', color: '#fce4ec', border: '#c62828', text: '#b71c1c', cat: 'Spor' },
 ];
 
 const PRICE_RANGES = [
-  { label: '0 - 2.000 ₺', min: 0, max: 2000 },
-  { label: '2.000 - 5.000 ₺', min: 2000, max: 5000 },
-  { label: '5.000 - 20.000 ₺', min: 5000, max: 20000 },
-  { label: '20.000 ₺ ve üzeri', min: 20000, max: 999999 },
+  { label: '0 - 2.000 TL', min: 0, max: 2000 },
+  { label: '2.000 - 5.000 TL', min: 2000, max: 5000 },
+  { label: '5.000 - 20.000 TL', min: 5000, max: 20000 },
+  { label: '20.000 TL ve uzeri', min: 20000, max: 999999 },
 ];
 
 export default function ProductListPage() {
@@ -106,8 +106,8 @@ export default function ProductListPage() {
     setAddingId(p.id);
     try {
       await addToCart({ productId: p.id, productName: p.name, price: p.price, quantity: 1, imageUrl: p.imageUrl });
-      showToast(`${p.name} sepete eklendi ✓`);
-    } catch { showToast('Giriş yapmanız gerekiyor'); }
+      showToast(p.name + ' sepete eklendi');
+    } catch { showToast('Giris yapmaniz gerekiyor'); }
     finally { setAddingId(null); }
   };
 
@@ -123,7 +123,7 @@ export default function ProductListPage() {
   const handleSidebarCat = (cat) => {
     setSelectedCategory(cat.id);
     setPage(0);
-    navigate(`/?category=${encodeURIComponent(cat.name)}`);
+    navigate('/?category=' + encodeURIComponent(cat.name));
   };
 
   const handleSidebarAll = () => {
@@ -147,8 +147,8 @@ export default function ProductListPage() {
               <span style={{ ...s.bannerBadge, background: slide.badgeColor, color: '#111' }}>{slide.badge}</span>
               <h1 style={s.bannerTitle}>{slide.title}</h1>
               <p style={s.bannerSub}>{slide.sub}</p>
-              <button style={s.bannerBtn} onClick={() => navigate(`/?category=${encodeURIComponent(slide.cat)}`)}>
-                Alışverişe Başla →
+              <button style={s.bannerBtn} onClick={() => navigate('/?category=' + encodeURIComponent(slide.cat))}>
+                Alisverise Basla
               </button>
             </div>
             <div style={s.bannerRight}>
@@ -165,7 +165,7 @@ export default function ProductListPage() {
             {KAMPANYA_BLOKLAR.map(k => (
               <div key={k.title}
                 style={{ ...s.kampanyaBlok, background: k.color, borderColor: k.border + '40' }}
-                onClick={() => { if (k.route) navigate(k.route); else if (k.cat) navigate(`/?category=${encodeURIComponent(k.cat)}`); }}
+                onClick={() => { if (k.route) navigate(k.route); else if (k.cat) navigate('/?category=' + encodeURIComponent(k.cat)); }}
               >
                 <span style={s.kampanyaIcon}>{k.icon}</span>
                 <div>
@@ -178,10 +178,10 @@ export default function ProductListPage() {
 
           <div style={s.promoStrip}>
             {[
-              { icon: '🚀', text: 'Ücretsiz Kargo', sub: '500₺ üzeri' },
-              { icon: '🔄', text: 'Kolay İade', sub: '30 gün içinde' },
-              { icon: '🔒', text: 'Güvenli Ödeme', sub: 'SSL korumalı' },
-              { icon: '⚡', text: 'Hızlı Teslimat', sub: '1-3 iş günü' },
+              { icon: '🚀', text: 'Ucretsiz Kargo', sub: '500 TL uzeri' },
+              { icon: '🔄', text: 'Kolay Iade', sub: '30 gun icinde' },
+              { icon: '🔒', text: 'Guvenli Odeme', sub: 'SSL korumali' },
+              { icon: '⚡', text: 'Hizli Teslimat', sub: '1-3 is gunu' },
             ].map(p => (
               <div key={p.text} style={s.promoItem}>
                 <span style={s.promoIcon}>{p.icon}</span>
@@ -198,8 +198,8 @@ export default function ProductListPage() {
       {isSearchOrFilter && (
         <div style={s.breadcrumb}>
           <span style={s.breadcrumbLink} onClick={handleSidebarAll}>Ana Sayfa</span>
-          <span style={s.breadcrumbSep}>›</span>
-          {keyword && <span style={s.breadcrumbCurrent}>"{keyword}" için {totalElements} sonuç</span>}
+          <span style={s.breadcrumbSep}>&gt;</span>
+          {keyword && <span style={s.breadcrumbCurrent}>"{keyword}" icin {totalElements} sonuc</span>}
           {selectedCategory && !keyword && <span style={s.breadcrumbCurrent}>{categories.find(c => c.id === selectedCategory)?.name}</span>}
         </div>
       )}
@@ -210,7 +210,7 @@ export default function ProductListPage() {
             <div style={s.filterBox}>
               <h3 style={s.filterTitle}>Kategori</h3>
               <button style={{ ...s.filterCatBtn, ...(selectedCategory === null ? s.filterCatActive : {}) }} onClick={handleSidebarAll}>
-                Tüm Kategoriler
+                Tum Kategoriler
               </button>
               {categories.map(c => (
                 <button key={c.id}
@@ -222,7 +222,7 @@ export default function ProductListPage() {
             </div>
 
             <div style={s.filterBox}>
-              <h3 style={s.filterTitle}>Fiyat Aralığı</h3>
+              <h3 style={s.filterTitle}>Fiyat Araligi</h3>
               {PRICE_RANGES.map((r, i) => (
                 <label key={i} style={s.checkLabel}>
                   <input type="checkbox" checked={selectedPriceRange === i}
@@ -231,10 +231,10 @@ export default function ProductListPage() {
                 </label>
               ))}
               <div style={s.customPrice}>
-                <input style={s.priceInput} placeholder="Min ₺" value={priceMin}
+                <input style={s.priceInput} placeholder="Min TL" value={priceMin}
                   onChange={e => { setPriceMin(e.target.value); setSelectedPriceRange(null); }} type="number" />
                 <span>-</span>
-                <input style={s.priceInput} placeholder="Max ₺" value={priceMax}
+                <input style={s.priceInput} placeholder="Max TL" value={priceMax}
                   onChange={e => { setPriceMax(e.target.value); setSelectedPriceRange(null); }} type="number" />
               </div>
               <button style={s.applyBtn} onClick={() => { setPage(0); fetchProducts(); }}>Uygula</button>
@@ -251,9 +251,9 @@ export default function ProductListPage() {
         <main style={s.main}>
           <div style={s.toolbar}>
             <span style={s.resultText}>
-              {loading ? 'Yükleniyor...' : keyword
-                ? <><strong>"{keyword}"</strong> için {totalElements} sonuç</>
-                : `${totalElements} ürün bulundu`}
+              {loading ? 'Yukleniyor...' : keyword
+                ? <><strong>"{keyword}"</strong> icin {totalElements} sonuc</>
+                : totalElements + ' urun bulundu'}
             </span>
             <select style={s.sortSelect} value={sortBy} onChange={e => { setSortBy(e.target.value); setPage(0); }}>
               {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
@@ -265,28 +265,28 @@ export default function ProductListPage() {
           ) : products.length === 0 ? (
             <div style={s.empty}>
               <div style={{ fontSize: '64px' }}>🔍</div>
-              <h3 style={{ fontSize: '20px', fontWeight: '700', margin: '16px 0 8px' }}>Ürün bulunamadı</h3>
-              <p style={{ color: '#999' }}>Farklı bir arama yapın veya filtreleri temizleyin</p>
+              <h3 style={{ fontSize: '20px', fontWeight: '700', margin: '16px 0 8px' }}>Urun bulunamadi</h3>
+              <p style={{ color: '#999' }}>Farkli bir arama yapin veya filtreleri temizleyin</p>
               <button style={{ marginTop: '16px', background: '#c62828', color: '#fff', border: 'none', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600' }} onClick={handleSidebarAll}>
-                Ana Sayfaya Dön
+                Ana Sayfaya Don
               </button>
             </div>
           ) : (
             <div style={s.grid}>
               {products.map(p => (
                 <ProductCard key={p.id} product={p} addingId={addingId} onAdd={handleAdd}
-                  onClick={() => navigate(`/products/${p.id}`)} />
+                  onClick={() => navigate('/products/' + p.id)} />
               ))}
             </div>
           )}
 
           {totalPages > 1 && (
             <div style={s.pagination}>
-              <button style={s.pageBtn} disabled={page === 0} onClick={() => setPage(p => p - 1)}>← Önceki</button>
+              <button style={s.pageBtn} disabled={page === 0} onClick={() => setPage(p => p - 1)}>Onceki</button>
               {[...Array(Math.min(totalPages, 7))].map((_, i) => (
                 <button key={i} style={{ ...s.pageNum, ...(i === page ? s.pageActive : {}) }} onClick={() => setPage(i)}>{i + 1}</button>
               ))}
-              <button style={s.pageBtn} disabled={page >= totalPages - 1} onClick={() => setPage(p => p + 1)}>Sonraki →</button>
+              <button style={s.pageBtn} disabled={page >= totalPages - 1} onClick={() => setPage(p => p + 1)}>Sonraki</button>
             </div>
           )}
         </main>
@@ -307,7 +307,7 @@ function ProductCard({ product, addingId, onAdd, onClick }) {
           ? <img src={product.imageUrl} alt={product.name} style={s.img} />
           : <div style={s.imgPh}>📦</div>}
         {product.stock < 5 && product.stock > 0 && <div style={s.stockBadge}>Son {product.stock}!</div>}
-        <div style={s.freeShipBanner}>ÜCRETSİZ KARGO</div>
+        <div style={s.freeShipBanner}>UCRETSIZ KARGO</div>
         {hovered && (
           <button style={s.quickAdd} onClick={e => onAdd(e, product)} disabled={addingId === product.id}>
             {addingId === product.id ? '...' : '+'}

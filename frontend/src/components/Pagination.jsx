@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Pagination Component - Reusable sayfalama bileşeni
  */
 export default function Pagination({
