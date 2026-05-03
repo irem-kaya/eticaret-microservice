@@ -238,7 +238,7 @@ jobs:
 
       - name: Jib ile Docker Image Build
         run: |
-          mvn -pl ${{ matrix.service }} compile jib:dockerBuild \
+          mvn -pl ${{ matrix.service }} --also-make compile jib:dockerBuild \
             -Djib.to.image=${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/${{ matrix.service }}:${{ github.sha }} \
             -Djib.to.tags=latest,v${{ github.ref_name }} \
             -DskipTests -q
