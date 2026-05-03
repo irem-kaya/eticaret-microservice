@@ -48,7 +48,11 @@ public class UserService {
         UserRegisteredEvent event = UserRegisteredEvent.of(
                 saved.getId(), saved.getEmail(), saved.getFirstName()
         );
-        rabbitTemplate.convertAndSend(exchange, userRegisteredKey, event);
+        try {
+            rabbitTemplate.convertAndSend(exchange, userRegisteredKey, event);
+        } catch (Exception e) {
+            System.out.println("RabbitMQ event gonderilemedi: " + e.getMessage());
+        }
 
         return UserResponse.from(saved);
     }
