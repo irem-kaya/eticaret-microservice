@@ -12,7 +12,7 @@
 [![License](https://img.shields.io/badge/License-MIT-22c55e)](LICENSE)
 
 > **N11 Backend Talent Hub — Bitirme Projesi**  
-> Spring Boot 3 + React 19 tabanlı, Trendyol/N11 tarzında gerçek dünya e-ticaret platformu. 9 bağımsız microservice, event-driven mimari, AI entegrasyonu ve tam CI/CD pipeline.
+> Spring Boot 3 + React 19 tabanlı, e-ticaret platformu. 9 bağımsız microservice, event-driven mimari, AI entegrasyonu ve tam CI/CD pipeline.
 
 ---
 
@@ -162,11 +162,11 @@ Spring'deki tüm `@Service`, `@Repository`, `@Component` bean'leri varsayılan o
 
 | Prensip | Uygulama |
 |---|---|
-| **S** — Single Responsibility | Her servis tek domain'den sorumlu: Cart Service yalnızca sepet, Order Service yalnızca sipariş işleri |
-| **O** — Open/Closed | Yeni öneri stratejisi eklemek için mevcut strateji sınıfları değiştirilmez, yeni sınıf yazılır |
-| **L** — Liskov Substitution | Strategy implementasyonları temel arayüzle yer değiştirilebilir |
-| **I** — Interface Segregation | Repository arayüzleri yalnızca ilgili metotları içerir, şişirilmez |
-| **D** — Dependency Inversion | Servisler concrete sınıflara değil arayüzlere bağımlıdır; Spring DI bunu sağlar |
+| **S** Single Responsibility | Her servis tek domain'den sorumlu: Cart Service yalnızca sepet, Order Service yalnızca sipariş işleri |
+| **O** Open/Closed | Yeni öneri stratejisi eklemek için mevcut strateji sınıfları değiştirilmez, yeni sınıf yazılır |
+| **L** Liskov Substitution | Strategy implementasyonları temel arayüzle yer değiştirilebilir |
+| **I** Interface Segregation | Repository arayüzleri yalnızca ilgili metotları içerir, şişirilmez |
+| **D** Dependency Inversion | Servisler concrete sınıflara değil arayüzlere bağımlıdır; Spring DI bunu sağlar |
 
 **DRY (Don't Repeat Yourself)**
 `common` modülü bu prensip için bilinçli olarak oluşturulmuştur. Paylaşılan DTO'lar, exception sınıfları ve utility metodlar tek yerde tanımlanır; her serviste kopyalanmaz.
@@ -379,12 +379,12 @@ Microservice ──► Spring Security — Rol Tabanlı Erişim Kontrolü (RBAC)
 
 ### Güvenlik Özellikleri
 
-- **JWT Access Token** — 15 dakika geçerlilik süresi
-- **Refresh Token** — 7 günlük yenileme süresi
-- **HTTPS** — Production ortamında TLS zorunlu
-- **CORS** — Yalnızca izin verilen origin'ler
-- **Rate Limiting** — API Gateway seviyesinde istek sınırlama
-- **BCrypt** — Şifre hashleme (Keycloak üzerinde)
+- **JWT Access Token** - 15 dakika geçerlilik süresi
+- **Refresh Token** - 7 günlük yenileme süresi
+- **HTTPS** - Production ortamında TLS zorunlu
+- **CORS** - Yalnızca izin verilen origin'ler
+- **Rate Limiting** - API Gateway seviyesinde istek sınırlama
+- **BCrypt** - Şifre hashleme (Keycloak üzerinde)
 
 ---
 
