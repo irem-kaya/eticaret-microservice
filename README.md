@@ -1,13 +1,4 @@
-# 🏢 E-Ticaret Microservice Platform
-**N11 Backend Talent Hub — Bitirme Projesi**  
-
-<div align="center">
-
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![Java](https://img.shields.io/badge/Java-17+-red)
-![React](https://img.shields.io/badge/React-19.2-blue)
+# E-Ticaret Microservice Platform
 
 [![CI/CD Pipeline](https://github.com/irem-kaya/eticaret-microservice/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/irem-kaya/eticaret-microservice/actions/workflows/ci-cd.yml)
 [![Java](https://img.shields.io/badge/Java-17+-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/)
@@ -20,6 +11,7 @@
 [![AWS](https://img.shields.io/badge/AWS-Deployed-FF9900?logo=amazonaws&logoColor=white)](https://aws.amazon.com/)
 [![License](https://img.shields.io/badge/License-MIT-22c55e)](LICENSE)
 
+> **N11 Backend Talent Hub — Bitirme Projesi**  
 > Spring Boot 3 + React 19 tabanlı, Trendyol/N11 tarzında gerçek dünya e-ticaret platformu. 9 bağımsız microservice, event-driven mimari, AI entegrasyonu ve tam CI/CD pipeline.
 
 ---
