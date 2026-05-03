@@ -184,47 +184,40 @@ class ProductServiceTest {
 
     // ── searchProducts ─────────────────────────────────────────────────────────
 
-    @Nested
-    @DisplayName("searchProducts()")
-    class SearchProducts {
 
-        @Test
-        @DisplayName("keyword ile arama → searchByKeyword çağrılır")
-        void searchProducts_withKeyword_callsKeywordRepo() {
-            when(stockAuthorizationService.canViewStock()).thenReturn(true);
-            Page<Product> empty = Page.empty();
-            when(productRepository.searchByKeyword(eq("laptop"), any())).thenReturn(empty);
+    @Test
+    void searchProducts_withKeyword_callsKeywordRepo() {
+        when(stockAuthorizationService.canViewStock()).thenReturn(true);
+        Page<Product> empty = new PageImpl<>(List.of());  // Page.empty() yerine
+        when(productRepository.searchByKeyword(eq("laptop"), any())).thenReturn(empty);
 
-            PageResponse<ProductResponse> resp =
-                    productService.searchProducts("laptop", null, null, null, 0, 10, "createdAt");
+        PageResponse<ProductResponse> resp =
+                productService.searchProducts("laptop", null, null, null, 0, 10, "createdAt");
 
-            verify(productRepository).searchByKeyword(eq("laptop"), any());
-            assertThat(resp.content()).isEmpty();
-        }
+        verify(productRepository).searchByKeyword(eq("laptop"), any());
+        assertThat(resp.content()).isEmpty();
+    }
 
-        @Test
-        @DisplayName("kategori filtresi → findByCategoryId çağrılır")
-        void searchProducts_withCategory_callsCategoryRepo() {
-            when(stockAuthorizationService.canViewStock()).thenReturn(false);
-            Page<Product> empty = Page.empty();
-            when(productRepository.findByCategoryIdAndActiveTrue(eq(2L), any())).thenReturn(empty);
+    @Test
+    void searchProducts_withCategory_callsCategoryRepo() {
+        when(stockAuthorizationService.canViewStock()).thenReturn(false);
+        Page<Product> empty = new PageImpl<>(List.of());  // Page.empty() yerine
+        when(productRepository.findByCategoryIdAndActiveTrue(eq(2L), any())).thenReturn(empty);
 
-            productService.searchProducts(null, 2L, null, null, 0, 10, null);
+        productService.searchProducts(null, 2L, null, null, 0, 10, null);
 
-            verify(productRepository).findByCategoryIdAndActiveTrue(eq(2L), any());
-        }
+        verify(productRepository).findByCategoryIdAndActiveTrue(eq(2L), any());
+    }
 
-        @Test
-        @DisplayName("fiyat aralığı filtresi → findByPriceRange çağrılır")
-        void searchProducts_withPriceRange_callsPriceRangeRepo() {
-            when(stockAuthorizationService.canViewStock()).thenReturn(true);
-            Page<Product> empty = Page.empty();
-            when(productRepository.findByPriceRange(any(), any(), any())).thenReturn(empty);
+    @Test
+    void searchProducts_withPriceRange_callsPriceRangeRepo() {
+        when(stockAuthorizationService.canViewStock()).thenReturn(true);
+        Page<Product> empty = new PageImpl<>(List.of());  // Page.empty() yerine
+        when(productRepository.findByPriceRange(any(), any(), any())).thenReturn(empty);
 
-            productService.searchProducts(null, null, BigDecimal.TEN, new BigDecimal("500"), 0, 10, "price");
+        productService.searchProducts(null, null, BigDecimal.TEN, new BigDecimal("500"), 0, 10, "price");
 
-            verify(productRepository).findByPriceRange(any(), any(), any());
-        }
+        verify(productRepository).findByPriceRange(any(), any(), any());
     }
 
     // ── bulkImport ─────────────────────────────────────────────────────────────
