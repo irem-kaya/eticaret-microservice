@@ -1,4 +1,4 @@
-package com.eticaret.order.facade;
+﻿package com.eticaret.order.facade;
 
 import com.eticaret.order.domain.*;
 import com.eticaret.order.dto.*;
@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
@@ -35,16 +37,16 @@ public class OrderFacade {
 
     @Transactional
     public OrderResponse createOrder(String userId, CreateOrderRequest request) {
-        // 1. Chain of Responsibility ile doğrula
+        // 1. Chain of Responsibility ile doÄŸrula
         validationChain.validate(request);
 
-        // 2. Siparişi oluştur
+        // 2. SipariÅŸi oluÅŸtur
         Order order = new Order();
         order.setUserId(userId);
         order.setTotalAmount(request.totalAmount());
         order.setShippingAddress(request.shippingAddress());
 
-        // 3. Order item'ları ekle
+        // 3. Order item'larÄ± ekle
         request.items().forEach(itemReq -> {
             OrderItem item = new OrderItem();
             item.setProductId(itemReq.productId());
@@ -57,10 +59,13 @@ public class OrderFacade {
 
         Order saved = orderRepository.save(order);
 
-        // 4. RabbitMQ'ya event gönder
-        rabbitTemplate.convertAndSend(exchange, orderCreatedKey,
-                OrderCreatedEvent.of(saved));
-
+        // 4. RabbitMQ'ya event gÃ¶nder
+        try {
+            rabbitTemplate.convertAndSend(exchange, orderCreatedKey,
+                    OrderCreatedEvent.of(saved));
+        } catch (Exception e) {
+            System.out.println("RabbitMQ event gonderilemedi: " + e.getMessage());
+        }
         return OrderResponse.from(saved);
     }
 
