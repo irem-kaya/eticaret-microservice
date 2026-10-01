@@ -34,7 +34,7 @@
 - [Proje Gereksinimleri](#-proje-gereksinimleri)
 
 ---
-
+Proje Tanıtım YouTube Linki --> https://youtu.be/6vk9slalk2s
 ## 📖 Proje Hakkında
 
 Bu proje, **N11 Backend Talent Hub** programı kapsamında geliştirilen bitirme projesidir. Ürün listeleme, sepet yönetimi, sipariş oluşturma ve ödeme işlemlerini kapsayan, üretime hazır bir e-ticaret platformu sunar.
